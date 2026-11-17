@@ -1,0 +1,44 @@
+[pull]
+	rebase = true
+[push]
+	followTags = true
+[init]
+	defaultBranch = main
+
+# DELTA CFG
+[core]
+    pager = delta
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true  # use n and N to move between diff sections
+
+[merge]
+    conflictstyle = diff3
+
+[diff]
+    colorMoved = default
+[credential "https://github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential
+[gpg]
+	format = ssh
+[commit]
+	gpgsign = true
+[gpg "ssh"]
+	allowedSignersFile = ~/.config/git/allowed_signers
+
+# Catppuccin Macchiato theme for delta (diff + blame)
+[include]
+    path = ~/.config/delta/catppuccin.gitconfig
+[delta]
+    features = catppuccin-macchiato
+
+# Name, email and signing key live outside the repo
+[include]
+    path = ~/.gitconfig.local

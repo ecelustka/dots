@@ -1,0 +1,117 @@
+# ~/.config/ghostty/config
+# tmux-based setup, migrated from Alacritty. Ghostty handles rendering only;
+# tmux owns tabs (windows) and splits (panes), same as the old Alacritty config.
+# NOTE: Ghostty has NO inline comments. A `#` is only a comment at the
+# START of a line. Never put `# ...` after a value or it becomes the value.
+
+# ============================================================
+# Font
+# ============================================================
+font-family = "VictorMono Nerd Font"
+font-style = "Medium"
+font-family-bold = "VictorMono Nerd Font"
+font-style-bold = "Bold"
+font-family-italic = "VictorMono Nerd Font"
+font-style-italic = "Medium Italic"
+font-family-bold-italic = "VictorMono Nerd Font"
+font-style-bold-italic = "Bold Italic"
+font-size = 16
+
+# ============================================================
+# Theme  (built in — no external import needed)
+# ============================================================
+theme = Catppuccin Macchiato
+
+# ============================================================
+# Window
+# ============================================================
+# hidden removes the titlebar entirely (~ Alacritty decorations = "buttonless").
+# This disables native macOS tabs — intentional, tmux replaces them.
+macos-titlebar-style = hidden
+# maximize = true                 ~ startup_mode = "Maximized"
+maximize = true
+# window-save-state off: tmux owns session persistence; restoring multiple
+# Ghostty windows would all re-attach to the same tmux session.
+window-save-state = never
+# macos-option-as-alt = true      ~ option_as_alt = "Both"
+macos-option-as-alt = true
+
+# breathing room between terminal content and window edges
+window-padding-x = 10
+window-padding-y = 6
+window-padding-balance = true
+window-padding-color = background
+
+# ============================================================
+# Cursor
+# ============================================================
+# solid, non-blinking cursor
+cursor-style-blink = false
+
+# ============================================================
+# Shell  (tmux wrapper, ~ Alacritty terminal.shell)
+# contains spaces -> Ghostty runs it via /bin/sh -c; the inner zsh -l
+# loads the login env so Homebrew's tmux is on PATH
+# ============================================================
+command = /bin/zsh -l -c "tmux attach || tmux"
+
+# shell integration can't be auto-injected through tmux; detect is harmless
+# and still covers plain-zsh surfaces (e.g. a window run without tmux)
+shell-integration = detect
+shell-integration-features = no-cursor,title,sudo,ssh-env,ssh-terminfo
+
+# ============================================================
+# Word navigation  (Alt+Arrow -> shell word jump)
+# lowercase esc bytes to match `bindkey "^[f"/"^[b"` in ~/.zshrc
+# ============================================================
+keybind = alt+right=text:\x1bf
+keybind = alt+left=text:\x1bb
+
+# ============================================================
+# tmux windows as "tabs"  (\x02 = ctrl-b prefix; ported from Alacritty)
+# ============================================================
+# cmd+t -> prefix c  (new window; overrides Ghostty new_tab)
+keybind = cmd+t=text:\x02c
+# cmd+w -> prefix x  (kill pane; overrides Ghostty close_surface)
+keybind = cmd+w=text:\x02x
+# cmd+1..9 -> prefix 1..9  (select window; overrides goto_tab)
+keybind = cmd+physical:one=text:\x021
+keybind = cmd+physical:two=text:\x022
+keybind = cmd+physical:three=text:\x023
+keybind = cmd+physical:four=text:\x024
+keybind = cmd+physical:five=text:\x025
+keybind = cmd+physical:six=text:\x026
+keybind = cmd+physical:seven=text:\x027
+keybind = cmd+physical:eight=text:\x028
+keybind = cmd+physical:nine=text:\x029
+
+# ============================================================
+# tmux panes as "splits"  (same keys as the old native-split binds)
+# ============================================================
+# cmd+d -> prefix %  (split right)
+keybind = cmd+d=text:\x02%
+# cmd+shift+d -> prefix "  (split down)
+keybind = cmd+shift+d=text:\x02"
+# cmd+alt+h/j/k/l -> prefix h/j/k/l  (select pane, vim-style; see ~/.tmux.conf)
+keybind = cmd+alt+h=text:\x02h
+keybind = cmd+alt+j=text:\x02j
+keybind = cmd+alt+k=text:\x02k
+keybind = cmd+alt+l=text:\x02l
+# cmd+shift+enter -> prefix z  (zoom pane, ~ toggle_split_zoom)
+keybind = cmd+shift+enter=text:\x02z
+
+# ============================================================
+# App leader sequences  (ported verbatim from Alacritty `chars`)
+# these send literal text to whatever's focused (nvim/shell/fzf)
+# ============================================================
+keybind = cmd+p=text:,p
+keybind = cmd+shift+t=text:,t
+keybind = cmd+n=text:,n
+keybind = cmd+e=text:,e
+# cmd+f overrides Ghostty's built-in scrollback search
+keybind = cmd+f=text:,f
+keybind = cmd+slash=text:,/
+keybind = cmd+g=text:,g
+keybind = cmd+shift+w=text:,w
+keybind = alt+k=text:,k
+keybind = alt+j=text:,j
